@@ -1,0 +1,64 @@
+.loginBox {
+    position: fixed;
+    width: 40%;
+    height: 50%;
+    background-color: #313338;
+    box-shadow: 0px 0px 10px 3px whitesmoke;
+    transform: translate(75%, 50%);
+    border-radius: 10px;
+}
+
+.loginBox .welcome {
+    position: relative;
+    color: white;
+    width: 60%;
+    text-align: center;
+    padding-bottom: 2vh;
+}
+
+.loginBox .welcome .hello {
+    font-size: x-large;
+    font-weight: bold;
+}
+
+.loginBox .welcome .greet {
+    font-size: large;
+    font-weight: light;
+    margin-top: -4%;
+}
+
+.loginBox .form {
+    width: 60%;
+    padding-left: 2vw;
+}
+
+.loginBox .form .input {
+    padding-bottom: 5%;
+}
+
+.loginBox .form .input .formInput {
+    width: 20vw;
+    height: 4vh;
+}
+
+.loginBox .form .input .part {
+    color: #B5BAC1;
+    font-size: small;
+    font-weight: bold;
+    padding-bottom: 1vh;
+}
+
+.loginBox .form .login {
+    width: 85%;
+    margin-top: 1vh;
+}
+
+.loginBox .avatar{
+    position : fixed;
+    width: 23%;
+    height: 30%;
+    transform: translate(270%,-180%);
+    background-image: url('./assets/icon.png');
+    background-size: contain;
+}
+  
