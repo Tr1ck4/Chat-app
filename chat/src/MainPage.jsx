@@ -2,104 +2,116 @@ import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import './MainPage.css'
+import GroupModal from './GroupModal';
 
-//const socket = io('http://localhost:3000');
-
-
+const socket = io('http://localhost:3000');
+console.log(socket);
 
 function MainPage() {
-    // const [messages, setMessages] = useState([]);
+    const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
-    // const [username, setUsername] = useState('');
-    // const [groups, setGroups] = useState([]);
-    // const [selectedGroup, setSelectedGroup] = useState(null);
+    const [username, setUsername] = useState('');
+    const [groups, setGroups] = useState([]);
+    const [selectedGroup, setSelectedGroup] = useState(null);
+    const [isCreate, setIsCreate] = useState(false);
 
-    // useEffect(async () => {
-    //     const fetchData = async () => {
-    //         try {
-    //             const res = await axios.get('/api/authenticate');
-    //             const Username = res.data.username;
-    //             if(!Username){
-    //                 window.location.replace('/login');
-    //             }
-    //             setUsername(Username);
-        
-    //             const groupsRes = await axios.get(`/api/groups/${Username}`);
-    //             setGroups(groupsRes.data);
-    //         } catch (error) {
-    //             console.error('Error fetching data:', error);
-    //         }
-    //     };
-        
-    //     fetchData();
-        
-    // }, []);
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await axios.get('/api/authenticate');
+                if (res.status !== 200) {
+                    console.warn('Authentication failed, redirecting to login');
+                    window.location.replace('/login');
+                } else {
+                    
+                    const Username = res.data.username;
+                    setUsername(Username);
+    
+                    const groupsRes = await axios.get(`/api/groups/${Username}`);
+                    setGroups(groupsRes.data);
 
-    // useEffect(()=>{
-    //     if (selectedGroup){
-    //         socket.emit('join', selectedGroup);
+                    socket.on('connection', () => {
+                        console.log('Connected to socket server');
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                window.location.replace('/login');
+            }
+        };
+    
+        fetchData();
+    }, []);
+    
+    useEffect(()=>{
+        if (selectedGroup){
+            
+            socket.emit('join', selectedGroup);
 
-    //         loadMessages();
+            loadMessages();
 
-    //         socket.on('chat message', handleMessage);
+            socket.on('chat message', handleMessage);
 
-    //         return () => {
-    //             socket.off('chat message', handleMessage);
-    //             socket.emit('leave', selectedGroup);
-    //         };
-    //     }
-    // },[selectedGroup])
-    // const handleGroupSelect = (group) => {
-    //     setSelectedGroup(group);
-    //     setMessages([]); 
-    // };
+            return () => {
+                socket.off('chat message', handleMessage);
+                socket.emit('leave', selectedGroup);
+            };
+        }
+    },[selectedGroup])
 
-    // const handleMessage = (msg) => {
-    //     setMessages((prevMessages) => [...prevMessages, msg]);
-    // };
+    const handleGroupSelect = (group) => {
+        if(selectedGroup != group){
+            setSelectedGroup(group);
+            setMessages([]); 
+        }
+    };
 
-    // const loadMessages = async () => {
-    //     try {
-    //         const response = await axios.get(`/api/groups/${selectedGroup}/0`);
-    //         response.data.forEach((message) => {
-    //             setMessages((prevMessages) => [...prevMessages, message.content]);
-    //         })
-    //     } catch (error) {
-    //         console.error('Error loading messages:', error);
-    //     }
-    // };
+    const handleMessage = (msg) => {
+        setMessages((prevMessages) => [...prevMessages, msg]);
+    };
+
+    const loadMessages = async () => {
+        try {
+            const response = await axios.get(`/api/groups/${selectedGroup}/0`);
+            response.data.forEach((message) => {
+                setMessages((prevMessages) => [...prevMessages, message]);
+            })
+        } catch (error) {
+            console.error('Error loading messages:', error);
+        }
+    };
     
     const handleMessageSubmit = (e) => {
         if (inputValue.trim() !== '') {
-            //socket.emit('chat message', {"content":inputValue, "chat_id":selectedGroup, "username" : username});
+            socket.emit('chat message', {content:inputValue, chat_id:selectedGroup, username:username});
             setInputValue('');
         }
     };
     const handleKeyDown = (e) => {
-        if (e.key === 'Enter') { // Check if the pressed key is Enter
-          handleMessageSubmit(); // Call handleMessageSubmit function
+        if (e.key === 'Enter') { 
+          handleMessageSubmit(); 
         }
-      };
-      
-    const groups = [{"id":'1', "chatname": "Group 1"},{"id":'1', "chatname": "Group 1"},{"id":'1', "chatname": "Group 1"},{"id":'1', "chatname": "Group 1"},{"id":'1', "chatname": "Group 1"},{"id":'1', "chatname": "Group 1"},{"id":'1', "chatname": "Group 1"},{"id":'1', "chatname": "Group 1"},{"id":'2', "chatname": "Group 2"}
-        ,{"id":'3', "chatname": "Group 3"},{"id":'4', "chatname": "Group 4"},{"id":'5', "chatname": "Group 5"}
-    ];
+    };
 
-    const messages = ['hello','hi','no'];
+    const handleFind = ()=>{
+        setIsCreate(true);
+    }
+      
 
     return (
         <>          
             <div className="mainpage">
                 <div className="panel">
-                    <div className='search'><div>Search bar</div></div>
+                    <div className='headbar'>
+                        <h1>SKOUT</h1>
+                        <button className= 'add'onClick={handleFind}> + </button>
+                    </div>
+                    <div style={{paddingLeft:'1vw'}}>
+                        <input className='search' type='text' placeholder='Search...'></input>
+                    </div>  
                     <div className='groups'>
-                            {/* {groups.map((group, index) => (
-                                <li key={index} onClick={() => handleGroupSelect(group.id)}>
-                                    {group.chatname}
-                                </li>
-                            ))} */}
                             {groups.map((group, index) => (
-                                <div key={index} className='item'>
+                                <div key={index} className='item' onClick={() => handleGroupSelect(group.id)}>
                                     {group.chatname}
                                 </div>
                             ))}
@@ -107,15 +119,17 @@ function MainPage() {
                     <div className = 'setting'>
                         <div className = 'img'><p>T</p></div>
                         <div className='name'> 
-                            Your name
+                            {username}
                         </div>
                         <div>Setting</div>
                     </div>
                 </div>
-                <div className="chatarea">
+                {selectedGroup && <div className="chatarea">
                     <div className='chatbox'>
                         {messages.map((message, index) => (
-                            <div key={index}>{message}</div>
+                            <div className={`messagebox ${message.username == username ? 'user':'other'}`} key={index}>
+                                <span>{message.content}</span>
+                            </div>
                         ))}
                     </div>
                     <div className='inputbox'>
@@ -128,26 +142,9 @@ function MainPage() {
                             onChange={(e) => setInputValue(e.target.value)}
                         />
                     </div>
-                </div>
-            </div> 
-                {/* {selectedGroup && (
-                    <div>
-                        <ul>
-                            {messages.map((message, index) => (
-                                <li key={index}>{message}</li>
-                            ))}
-                        </ul>
-                        <form onSubmit={handleMessageSubmit}>
-                            <input
-                                type="text"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                            />
-                            <button type="submit">Send</button>
-                        </form>
-                    </div>
-                )} */}
-            
+                </div>}
+                {isCreate && <GroupModal/>}
+            </div>            
         </>
     );
 }

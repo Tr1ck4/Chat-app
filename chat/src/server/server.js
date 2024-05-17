@@ -5,6 +5,7 @@ import path from 'path';
 import {DBModel} from './database.js';
 import jwt from 'jsonwebtoken';
 import {expressjwt} from 'express-jwt';
+import cors from 'cors';
 
 const userModel = new DBModel('./database.db');
 
@@ -12,10 +13,12 @@ const app = express();
 const server = createServer(app);
 const io = new Server(server);
 const __dirname = path.resolve(path.dirname(''));
+const PORT = 3000;
 
 const secretKey = 'TQEWE31824';
 export const authenticateJWT = expressjwt({ secret: secretKey, algorithms: ['HS256'] });
 app.use(express.json());
+app.use(cors());
 app.use(express.static(path.join(__dirname, 'dist')));
 
 function generateToken(user) {
@@ -57,7 +60,6 @@ function getTokenFromCookie(req) {
 }
 app.get('/api/authenticate', authenticateToken, (req, res) => {
     const token = getTokenFromCookie(req);
-
     const userName = jwt.decode(token).username;
     const displayname = jwt.decode(token).accountname;
     res.json({ "username": userName, "accountname": displayname });
@@ -120,11 +122,24 @@ app.get('/api/groups/:chat_id/:offset', async (req, res) => {
     }
 })
 
-
-
+app.get('/api/users/:input', async (req, res) => {
+    const {input} = req.params;
+    try{
+        userModel.findUser(input, (err,users)=>{
+            if(err) {
+                res.status(500).json({error: err.message});
+                return;
+            }
+            res.json(users);
+        })
+    }catch (err) {
+        console.log(err);
+    }
+})
 
 
 io.on('connection', (socket) => {
+    console.log('user connected');
     socket.on('join', (chat_id) => {
         socket.join(chat_id);
     });
@@ -132,26 +147,24 @@ io.on('connection', (socket) => {
     socket.on('leave', (chat_id) => {
         socket.leave(chat_id);
     });
-
+    
     socket.on('chat message', (msg) => {
         const { chat_id, username, content } = msg;
         const timestamp = new Date().toISOString();
-
         userModel.insertData(chat_id, username, timestamp, content, (err) => {
             if (err) {
                console.error('Error inserting message: ' + err.message);
                return;
             }
-            io.to(chat_id).emit('chat message', content);
+            io.to(chat_id).emit('chat message', msg);
         });
     });
-
-    
 });
 
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
-server.listen(3000, () => {
-    console.log(`Server is running on port ${3000}`);
+
+server.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });
