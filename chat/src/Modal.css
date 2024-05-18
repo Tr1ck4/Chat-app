@@ -1,0 +1,28 @@
+.findBox{
+    position : absolute;
+    width: 30%;
+    height: 30%;
+    transform : translateX(15vw);
+    background-color: rgb(110, 110, 110);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.findArea{
+    width: 80;
+    padding: 8px;
+    border: none;
+    outline: none;
+    background-color: rgb(110, 110, 110);
+    color:white
+}
+
+.userbt{
+    background-color: rgb(110, 110, 110);
+    border:none;
+    outline:none;
+}
+
+.userbt:hover{
+    background-color:rgb(200, 200, 200)
+}

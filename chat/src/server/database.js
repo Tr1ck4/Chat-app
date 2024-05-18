@@ -51,8 +51,8 @@ export class DBModel{
     }
 
     findUser(input, callback) {
-        let sql = 'SELECT * FROM users WHERE username LIKE ?';
-        this.db.all(sql, [`${input}%`], callback);
+        let sql = `SELECT * FROM users WHERE username LIKE '${input}%'`;
+        this.db.all(sql, callback);
     }
     
     getUser(username, password) {

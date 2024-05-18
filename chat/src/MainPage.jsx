@@ -143,8 +143,8 @@ function MainPage() {
                         />
                     </div>
                 </div>}
-                {isCreate && <GroupModal/>}
             </div>            
+            {isCreate && <GroupModal/>}
         </>
     );
 }
