@@ -11,13 +11,12 @@ export class DBModel{
         });
     }
 
-    
-
     initializeDatabase() {
         this.db.run(`CREATE TABLE IF NOT EXISTS users (
             username TEXT NOT NULL UNIQUE, 
             password TEXT NOT NULL, 
             display_name TEXT NOT NULL, 
+            status INTEGER NOT NULL, 
             PRIMARY KEY (username)
         )`, (err) => {
             if (err) {
@@ -51,8 +50,12 @@ export class DBModel{
     }
 
     findUser(input, callback) {
-        let sql = `SELECT * FROM users WHERE username LIKE '${input}%'`;
+        let sql = `SELECT * FROM users WHERE display_name LIKE '${input}%'`;
         this.db.all(sql, callback);
+    }
+    updateStatus(username, status, callback) {
+        let sql = 'UPDATE users SET status = ? where username = ?';
+        this.db.run(sql,[username, status], callback);
     }
     
     getUser(username, password) {
@@ -68,13 +71,13 @@ export class DBModel{
         });
       }
 
-      loadMessages(chat_id, offset, callback) {
+    loadMessages(chat_id, offset, callback) {
         let sql = `SELECT m.chat_id, m.username, m.timestamp, m.content 
-                   FROM messages AS m 
-                   JOIN chats AS c ON m.chat_id = c.id AND m.username = c.username 
-                   WHERE m.chat_id = ? 
-                   ORDER BY m.timestamp DESC 
-                   LIMIT 10 OFFSET ?`;
+                    FROM messages AS m 
+                    JOIN chats AS c ON m.chat_id = c.id AND m.username = c.username 
+                    WHERE m.chat_id = ? 
+                    ORDER BY m.timestamp DESC 
+                    LIMIT 10 OFFSET ?`;
         this.db.all(sql, [chat_id, offset * 5], callback);
     }
     
@@ -85,10 +88,10 @@ export class DBModel{
     }
     
 
-    createChats(id, chatname, username, partners, callback){
+    createChats(id, username, partners, callback){
         let sql = 'INSERT INTO chats (id, chatname, username) VALUES (?,?,?)';
-        this.db.run(sql,[id, chatname, username],callback);
-        this.db.run(sql,[id, chatname, partners],callback);
+        this.db.run(sql,[id, partners, username],callback);
+        this.db.run(sql,[id, username, partners],callback);
     }
 
     insertData(chat_id, username, timestamp, content, callback) {

@@ -138,11 +138,23 @@ app.get('/api/users/:input', async (req, res) => {
 })
 
 
+
 io.on('connection', (socket) => {
     console.log('user connected');
     socket.on('join', (chat_id) => {
         socket.join(chat_id);
     });
+
+    socket.on('create', (data) => {
+        const {id, username, partner} = data;
+        userModel.createChats(id, username, partner, (err)=>{
+            if(err){
+                console.error('Error inserting message: ' + err.message);
+                return;
+            }
+            io.emit('group created');
+        })
+    })
 
     socket.on('leave', (chat_id) => {
         socket.leave(chat_id);

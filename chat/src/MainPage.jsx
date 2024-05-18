@@ -33,6 +33,10 @@ function MainPage() {
                     socket.on('connection', () => {
                         console.log('Connected to socket server');
                     });
+
+                    socket.on('group created', () => {
+                        window.location.reload();
+                    });
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -96,6 +100,7 @@ function MainPage() {
     const handleFind = ()=>{
         setIsCreate(true);
     }
+
       
 
     return (
@@ -144,7 +149,7 @@ function MainPage() {
                     </div>
                 </div>}
             </div>            
-            {isCreate && <GroupModal/>}
+            {isCreate && <GroupModal username={username}/>}
         </>
     );
 }

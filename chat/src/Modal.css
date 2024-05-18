@@ -1,11 +1,16 @@
 .findBox{
     position : absolute;
-    width: 30%;
+    width: 20%;
     height: 30%;
     transform : translateX(15vw);
     background-color: rgb(110, 110, 110);
     padding: 20px;
     border-radius: 10px;
+}
+
+.findRes{
+    overflow-y: scroll;
+    height: 25vh;
 }
 
 .findArea{
@@ -26,3 +31,5 @@
 .userbt:hover{
     background-color:rgb(200, 200, 200)
 }
+
+

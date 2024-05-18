@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import './Modal.css'
-import ''
+import { v4 as uuidv4 } from 'uuid';
+import io from 'socket.io-client';
+import './Modal.css';
+import './MainPage.css';
 
-export default function GroupModal() {
+const socket = io('http://localhost:3000');
+
+export default function GroupModal({ username }) {
   const [input, setInput] = useState("");
   const [users, setUsers] = useState([]);
   const [isFinding, setIsFinding] = useState(false);
@@ -12,7 +16,6 @@ export default function GroupModal() {
     if (value) {
       try {
         const response = await axios.get(`/api/users/${value}`);
-        console.log('API response:', response.data); // Log API response
         setUsers(response.data);
         setIsFinding(true);
       } catch (error) {
@@ -26,34 +29,36 @@ export default function GroupModal() {
     }
   };
 
-  const handleUserClick = () =>{
-
+  const handleUserClick = (value) => {
+    socket.emit('create', { id: uuidv4(), username: username, partner: value });
+    setIsFinding(false);
   }
 
   return (
-    <>
-      <div className='findBox'>
-        To :
-        <input
-          className='findArea'
-          value={input}
-          placeholder='username...'
-          onChange={(e) => {setInput(e.target.value);findUser(e.target.value)}}
-        />
-        {isFinding && (
-          <div>
-            {users.length > 0 ? (
-              users.map((user, index) => (
-                <div onClick={handleUserClick} className='item'>
-                    <p key={index}>{user.display_name} ({user.username})</p>
-                </div>
-              ))
-            ) : (
-              <p>No users found</p>
-            )}
-          </div>
-        )}
-      </div>
-    </>
+    <div className='findBox'>
+      To :
+      <input
+        className='findArea'
+        value={input}
+        placeholder='username...'
+        onChange={(e) => {
+          setInput(e.target.value);
+          findUser(e.target.value);
+        }}
+      />
+      {isFinding && (
+        <div className='findRes'>
+          {users.length > 0 ? (
+            users.map((user, index) => (
+              <div className='item' key={index}>
+                <p onClick={() => handleUserClick(user.username)}>{user.display_name}</p>
+              </div>
+            ))
+          ) : (
+            <p>No users found</p>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
