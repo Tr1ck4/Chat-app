@@ -55,7 +55,12 @@ export class DBModel{
     }
     updateStatus(username, status, callback) {
         let sql = 'UPDATE users SET status = ? where username = ?';
-        this.db.run(sql,[username, status], callback);
+        this.db.run(sql,[status, username], callback);
+    }
+
+    getUserStatus(username, callback) {
+        const sql = `SELECT status FROM users WHERE username = ?`;
+        this.db.get(sql, [username], callback);
     }
     
     getUser(username, password) {
@@ -82,7 +87,6 @@ export class DBModel{
     }
     
     loadChats(username, callback) {
-        console.log(username)
         let sql = 'SELECT * FROM chats WHERE username = ?';
         this.db.all(sql, [username], callback);
     }

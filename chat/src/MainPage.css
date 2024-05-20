@@ -1,6 +1,6 @@
 .mainpage{
     position:fixed;
-    background-color:#27005d;
+    background: linear-gradient(#e66465, #9198e5);
     width:100vw;
     height: 100vh;
     overflow : hidden;
@@ -16,7 +16,7 @@ html, body {
     display: flex; /* Use 'display: flex' for flexbox layout */
     width: 100%; /* Adjust width to take full available width */
     height: 5vh; /* Maintain height as defined */
-    width: 13vw;
+    width: 11vw;
     flex-direction: row; /* Default value, can be omitted */
     align-items: center; /* Align items vertically in the center */
     justify-content: space-between; /* Space out items with space in between */
@@ -29,7 +29,7 @@ html, body {
     position: relative;
     min-height: 3vh;
     margin-bottom:1vh;
-    width: 12vw; /* Maintain width as defined */
+    width: 10vw; /* Maintain width as defined */
     align-content: center; /* Align content center */
     padding-left: 1vw; /* Maintain padding as defined */
     display: flex; /* Use flexbox for internal alignment */
@@ -37,18 +37,10 @@ html, body {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Add shadow for better visibility */
 }
 
-button .add {
-    color: black; /* Button text color */
-    border: none; /* Remove default border */
-    cursor: pointer; /* Change cursor on hover */
-    font-size: 1.2rem; /* Font size */
-    border-radius: 50%; /* Optional: Add border-radius for rounded corners */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Add shadow for better visibility */
-    transition: background-color 0.3s; /* Smooth transition for background color */
-}
 
-button:hover {
-    background-color: #787878; /* Change background color on hover */
+button.add{
+    background-color:transparent;
+    border:none;
 }
 
 .img{
@@ -68,36 +60,50 @@ button:hover {
 }
 .panel{
     display: fixed;
-    background-color: #9400ff;
-    width: 15vw;
-    height: 100vh;
+    /* From https://css.glass */
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.8px);
+    -webkit-backdrop-filter: blur(7.8px);
+    border: 1px solid rgba(255, 255, 255, 1);
+    width: 13vw;
+    height: 96vh;
     border-top-right-radius: 10px;
+    margin-top: 2vh;
+    margin-left: 1vw;
 }
 .setting{
     display: flex;
     flex-direction: row;
-    width: 15vw;
+    width: 13vw;
     height: 5vh;
     align-items:center;
 }
 .groups{
     position:flex;
     width: 15vw;
-    height: 84vh;
+    height: 80vh;
     overflow-y: scroll;
+    flex-direction: row;
 }
 .item{
+    align-items: center;
     color:white;
-    position: relative;
+    display: flex;
+    flex-direction: row;
     font-size: x-large;
+    width: 12vw;
     height:8vh;
     align-content: center;
     padding-left: 1vw;
+    
 }
 
 .item:hover{
     background-color: #aed2ff;
 }
+
 
 ::-webkit-scrollbar {
     width: 5px;
@@ -121,7 +127,7 @@ button:hover {
 .inputbox{
     position:absolute;
     width: 81vw;
-    margin-left: 2vw;
+    margin-left: 1vw;
     height:4vh;
     background-color: #555;
     align-content: center;
@@ -130,13 +136,21 @@ button:hover {
 
 .chatbox {
     position: relative;
-    height: 90vh;
+    height: 88vh;
     margin-left: 2vw;
     margin-right: 2vw;
     margin-top: 3vh;
     overflow-y: auto; 
     display: flex;
     flex-direction: column;
+}
+.chatname {
+    width: 50px;
+    background-color: transparent;
+    white-space: nowrap; /* Prevent the text from wrapping */
+    overflow: hidden; /* Hide overflow */
+    text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
+    flex:1
 }
 
 .messagebox {
@@ -167,19 +181,26 @@ span {
 
 .chatarea{
     position: absolute;
-    width: 85vw;
-    height : 100vh;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.8px);
+    -webkit-backdrop-filter: blur(7.8px);
+    border: 1px solid rgba(255, 255, 255, 1);
+    width: 83vw;
+    height : 96vh;
     z-index: 9999;
-    transform: translate(15vw,-100vh);
+    transform: translate(16vw,-100vh);
+    margin-top:4vh;
 }
-
 
 .chat-input{
     position: relative;
-    width: 75vw;
+    width: 73vw;
     background-color: transparent;
     place-self: center;
-    margin-left: 2vw;
+    margin-left: 1vw;
     color: azure;
     border: none;
 }
+

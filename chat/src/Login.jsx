@@ -15,7 +15,7 @@ const LoginPage = () => {
             });
             
             if (res.status >= 200 && res.status < 300) {
-                window.location.replace('/home'); 
+                window.location.replace('/'); 
             } else {
                 throw new Error('Login failed: Invalid credentials');
             }

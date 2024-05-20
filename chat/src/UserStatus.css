@@ -1,0 +1,42 @@
+.user-status {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #007bff; /* Background color for the circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 1.2rem;
+    color: white;
+}
+
+.initial {
+    font-weight: bold;
+}
+
+.status-point {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    bottom: 3px;
+    right: 3px;
+    border: 2px solid white; /* Border to separate the status point from the circle */
+}
+
+.online {
+    background-color: green;
+}
+
+.offline {
+    background-color: red;
+}

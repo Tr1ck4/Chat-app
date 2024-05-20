@@ -31,6 +31,9 @@ export default function GroupModal({ username }) {
 
   const handleUserClick = (value) => {
     socket.emit('create', { id: uuidv4(), username: username, partner: value });
+    socket.on('group created', () => {
+      window.location.reload();
+    });
     setIsFinding(false);
   }
 

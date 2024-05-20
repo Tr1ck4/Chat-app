@@ -1,12 +1,11 @@
 import express from 'express';
 import { createServer } from 'http';
-import {Server} from 'socket.io';
+import { Server } from 'socket.io';
 import path from 'path';
-import {DBModel} from './database.js';
+import { DBModel } from './database.js';
 import jwt from 'jsonwebtoken';
-import {expressjwt} from 'express-jwt';
-import cors from 'cors';
-
+import { expressjwt } from 'express-jwt';
+import cors from 'cors'
 const userModel = new DBModel('./database.db');
 
 const app = express();
@@ -58,6 +57,7 @@ function getTokenFromCookie(req) {
 
     return jwtCookie.split('=')[1];
 }
+
 app.get('/api/authenticate', authenticateToken, (req, res) => {
     const token = getTokenFromCookie(req);
     const userName = jwt.decode(token).username;
@@ -66,10 +66,8 @@ app.get('/api/authenticate', authenticateToken, (req, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
-    // Clear the 'token' cookie by setting its expiration to a past date
     res.setHeader('Set-cookie', `token=deleted; Max-Age=3600; HttpOnly`);
 
-    // Send a response indicating success
     res.json({ message: 'Logout successful' });
 });
 
@@ -88,7 +86,7 @@ app.post('/api/login', async (req, res) => {
     res.json({ message: 'Login successful' });
 });
 
-app.get('/api/groups/:username', async (req, res) => {
+app.get('/api/groups/:username', authenticateToken, async (req, res) => {
     const { username } = req.params;
     if (!username) {
         return res.status(400).json({ message: 'Username is required' });
@@ -107,71 +105,120 @@ app.get('/api/groups/:username', async (req, res) => {
     }
 });
 
-app.get('/api/groups/:chat_id/:offset', async (req, res) => {
-    const {chat_id, offset} = req.params;
-    try{
+app.get('/api/groups/:chat_id/:offset', authenticateToken, async (req, res) => {
+    const { chat_id, offset } = req.params;
+    try {
         userModel.loadMessages(chat_id, offset, (err, messages) => {
-            if(err){
-                res.status(500).json({error: err.message});
+            if (err) {
+                res.status(500).json({ error: err.message });
                 return;
             }
             res.json(messages);
-        })
-    }catch (err) {
-        console.log(err)
+        });
+    } catch (err) {
+        console.log(err);
     }
-})
+});
 
-app.get('/api/users/:input', async (req, res) => {
-    const {input} = req.params;
-    try{
-        userModel.findUser(input, (err,users)=>{
-            if(err) {
-                res.status(500).json({error: err.message});
+app.get('/api/users/:input', authenticateToken, async (req, res) => {
+    const { input } = req.params;
+    try {
+        userModel.findUser(input, (err, users) => {
+            if (err) {
+                res.status(500).json({ error: err.message });
                 return;
             }
             res.json(users);
-        })
-    }catch (err) {
+        });
+    } catch (err) {
         console.log(err);
     }
-})
+});
 
-
+app.get('/api/status/:username', async (req, res) => {
+    const { username } = req.params;
+    userModel.getUserStatus(username, (err, row) => {
+        if (err) {
+            res.status(500).json({ error: err.message });
+            return;
+        }
+        res.json(row);
+    });
+});
 
 io.on('connection', (socket) => {
-    console.log('user connected');
+    console.log('connect to sever')
+    socket.on('connected', (username) => {
+        socket.username = username; 
+        userModel.updateStatus(socket.username, 1, (err) => {
+            if (err) {
+                console.log(err);
+            }
+        });
+    });
+
     socket.on('join', (chat_id) => {
+        socket.currentChatId = chat_id;
         socket.join(chat_id);
     });
 
     socket.on('create', (data) => {
-        const {id, username, partner} = data;
-        userModel.createChats(id, username, partner, (err)=>{
-            if(err){
+        const { id, username, partner } = data;
+        userModel.createChats(id, username, partner, (err) => {
+            if (err) {
                 console.error('Error inserting message: ' + err.message);
                 return;
             }
             io.emit('group created');
-        })
-    })
+        });
+    });
 
     socket.on('leave', (chat_id) => {
         socket.leave(chat_id);
     });
-    
+
     socket.on('chat message', (msg) => {
         const { chat_id, username, content } = msg;
         const timestamp = new Date().toISOString();
         userModel.insertData(chat_id, username, timestamp, content, (err) => {
             if (err) {
-               console.error('Error inserting message: ' + err.message);
-               return;
+                console.error('Error inserting message: ' + err.message);
+                return;
             }
             io.to(chat_id).emit('chat message', msg);
+            //socket.broadcast.to(chat_id).emit('notification', 'New message received!');
         });
     });
+
+    socket.on('notification', (notification) => {
+        console.log(notification);
+        // Display the notification in the UI
+        displayNotification(notification);
+    });
+
+    socket.on('user_disconnect', (username) => {
+        if (username) {
+            userModel.updateStatus(username, 0, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
+
+    socket.on('disconnect', () => {
+        const username = socket.username;
+        if (username) {
+            userModel.updateStatus(username, 0, (err) => {
+                if (err) {
+                    console.log(err);
+                }
+            });
+        }
+    });
 });
+
+
 
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
