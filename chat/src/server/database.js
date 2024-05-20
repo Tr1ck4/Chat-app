@@ -91,6 +91,10 @@ export class DBModel{
         this.db.all(sql, [username], callback);
     }
     
+    createUsers(username, password, callback) {
+        let sql = 'INSERT INTO users (username ,password, display_name, status) VALUES (?, ?,?,?)';
+        this.db.run(sql,[username,password,username,0],callback);
+    }
 
     createChats(id, username, partners, callback){
         let sql = 'INSERT INTO chats (id, chatname, username) VALUES (?,?,?)';

@@ -45,12 +45,12 @@ const LoginPage = () => {
                     <button className='login' type="submit" onClick={handleSubmit}>Login</button>
 
                     <div className='input'>
-                        <div style={ {color: '#B5BAC1', fontSize:'small', paddingTop: '5px'}}>Need an account? 
+                        <div className = 'bottomline'style={ {color: '#B5BAC1', fontSize:'small', paddingTop: '5px'}}>Need an account? 
                             <a href='/register' style={{paddingLeft:'10px'}}>Register</a>
                         </div>
                     </div>
                 </form>
-                <img src= {icon} style={{scale:'0.5', transform:'translate(150%,-180%)'}}></img>
+                <img src= {icon} className = 'icon'></img>
             </div>
         </main>
     )

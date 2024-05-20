@@ -15,7 +15,17 @@ function MainPage() {
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [isCreate, setIsCreate] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
     // const [notification, setNotification] = useState('');
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+    
+        // Cleanup listener on component unmount
+        return () => {
+          window.removeEventListener('resize', handleResize);
+        };
+      }, []);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -41,17 +51,15 @@ function MainPage() {
 
         fetchUserData();
 
-    
-        // socket.on('notification', (notification) => {
-        //     setNotification((prevNotifications) => [...prevNotifications, notification]);
-        //   });
-
         return () => {
             socket.off('disconnect');
             socket.disconnect();
         };
     }, []);
 
+    const handleResize = () => {
+        setIsSmallScreen(window.innerWidth <= 480);
+    };
     useEffect(() => {
         if (selectedGroup) {
             socket.emit('join', selectedGroup);
@@ -149,35 +157,31 @@ function MainPage() {
                         ))}
                     </div>
                     <div className="setting">
-                        <UserStatus username={username} />
-                        <div className="name">
-                            {username}
-                        </div>
-                        <div>Setting</div>
+                        {!isSmallScreen && <UserStatus username={username} className="use" />}
+                        <div className="name">{username}</div>
+                        <div className="setButton">Setting</div>
                     </div>
                 </div>
-                {selectedGroup && (
-                    
-                        <div className="chatarea">
-                            <div className="chatbox">
-                                {messages.map((message, index) => (
-                                    <div className={`messagebox ${message.username === username ? 'user' : 'other'}`} key={index}>
-                                        <span>{message.content}</span>
-                                    </div>
-                                ))}
-                            </div>
-                            <div className="inputbox">
-                                <input
-                                    type="text"
-                                    onKeyDown={handleKeyDown}
-                                    className="chat-input"
-                                    value={inputValue}
-                                    placeholder="Message..."
-                                    onChange={(e) => setInputValue(e.target.value)}
-                                />
-                            </div>
+                {selectedGroup && (                   
+                    <div className="chatarea">
+                        <div className="chatbox">
+                            {messages.map((message, index) => (
+                                <div className={`messagebox ${message.username === username ? 'user' : 'other'}`} key={index}>
+                                    <span>{message.content}</span>
+                                </div>
+                            ))}
                         </div>
-                    
+                        <div className="inputbox">
+                            <input
+                                type="text"
+                                onKeyDown={handleKeyDown}
+                                className="chat-input"
+                                value={inputValue}
+                                placeholder="Message..."
+                                onChange={(e) => setInputValue(e.target.value)}
+                            />
+                        </div>
+                    </div>                   
                 )}
                 
             </div>

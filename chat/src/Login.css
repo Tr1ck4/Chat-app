@@ -71,4 +71,71 @@
     background-image: url('./assets/icon.png');
     background-size: contain;
 }
+
+.icon{
+    scale: 0.5;
+    transform: translate(150%,-180%);
+}
   
+@media (max-width: 768px) {
+    .loginBox {
+        width: 70%;
+        transform: translate(20%,70%);
+        height : 40%;
+    }
+    .loginBox .welcome .hello {
+        font-size: 1.25rem; /* Adjust font size for tablets */
+    }
+    .loginBox .welcome .greet {
+        font-size: 0.875rem; /* Adjust font size for tablets */
+    }
+
+    .loginBox .form .input .formInput{
+        width: 35vw;
+        height: 4vh;
+    }
+    .icon{
+        scale:0.3;
+        transform: translate(130%,-260%);
+    }
+
+}
+
+@media (max-width: 480px) {
+    .loginBox {
+        min-width: 70%;
+        padding: 1rem; /* Adjust padding */
+    }
+
+    .loginBox .welcome{
+        min-width: 70vw;
+    }
+    .loginBox .welcome .hello {
+        font-size: 1rem; /* Adjust font size for mobile devices */
+    }
+    .loginBox .welcome .greet {
+        font-size: 0.75rem; /* Adjust font size for mobile devices */
+    }
+
+    .loginBox .form{
+        min-width: 50vw;
+        margin-right : 2vw;
+    }
+
+    .loginBox .form .login{
+        min-width: 65vw;
+
+    }
+
+    .bottomline{
+        margin-top:2vh
+    }
+
+    .loginBox .form .input .formInput{
+        min-width: 64vw;
+        min-height: 3vh;
+    }
+    .loginBox .icon{
+        visibility: hidden;
+    }
+}

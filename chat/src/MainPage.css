@@ -12,6 +12,7 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
 .headbar {
     display: flex; /* Use 'display: flex' for flexbox layout */
     width: 100%; /* Adjust width to take full available width */
@@ -59,8 +60,7 @@ button.add{
     width: 100px;
 }
 .panel{
-    display: fixed;
-    /* From https://css.glass */
+    position: fixed;
     background: rgba(255, 255, 255, 0.4);
     border-radius: 16px;
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -76,9 +76,11 @@ button.add{
 .setting{
     display: flex;
     flex-direction: row;
-    width: 13vw;
+    width: 12vw;
     height: 5vh;
     align-items:center;
+    border-top: 1px solid rgba(255, 255, 255, 1);
+    padding-left:1vw;
 }
 .groups{
     position:flex;
@@ -147,9 +149,9 @@ button.add{
 .chatname {
     width: 50px;
     background-color: transparent;
-    white-space: nowrap; /* Prevent the text from wrapping */
-    overflow: hidden; /* Hide overflow */
-    text-overflow: ellipsis; /* Add ellipsis (...) for overflowed text */
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
     flex:1
 }
 
@@ -190,7 +192,7 @@ span {
     width: 83vw;
     height : 96vh;
     z-index: 9999;
-    transform: translate(16vw,-100vh);
+    transform: translate(16vw,-2vh);
     margin-top:4vh;
 }
 
@@ -202,5 +204,77 @@ span {
     margin-left: 1vw;
     color: azure;
     border: none;
+}
+
+@media (max-width: 768px) {
+    .panel{
+        width: 25vw;
+    }
+    .headbar{
+        width: 24vw;
+    }
+    input.search{
+        width: 22vw;
+    }
+    .groups{
+        width: 25vw;
+        overflow-x: hidden;
+    }
+    .item{
+        width: 24vw;
+    }
+    .setting{
+        width: 24vw;
+    }
+    .chatarea{
+        width: 70vw;
+        margin-left:12vw;
+    }
+    .inputbox{
+        width: 68vw;
+    }
+    .chat-input{
+        width: 65vw;
+    }
+}
+
+@media (max-width: 480px) {
+    .headbar h1 {
+        display: none;
+        width: 14vw;
+    }
+    .add{
+        margin-left:2vw;
+    }
+    .panel {
+        width: 14vw;
+    }
+    span.chatname {
+        display: none;
+    }
+    .setting {
+        width: 13vw;
+    }
+    .setting .name {
+        display: none;
+    }
+    .setting .use {
+        display: none;
+    }
+    .groups{
+        width: 14vw;
+        overflow-x: hidden;
+    }
+    .item{
+        width: 14vw;
+        margin-left: 2vw;
+    }
+    input.search{
+        width: 10vw;
+
+    }
+    .user-status{
+        display: none;
+    }
 }
 

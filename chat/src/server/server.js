@@ -57,6 +57,24 @@ function getTokenFromCookie(req) {
 
     return jwtCookie.split('=')[1];
 }
+app.post('/api/register', async (req, res) => {  
+    const { username, password } = req.body;
+    try {
+        userModel.createUsers(username, password, (err, result) => {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            else{
+                res.status(201).json({ message: 'User registered successfully' }); 
+            }
+        });        
+    } catch (error) {
+        console.error('Error registering user:', error);
+        res.status(500).json({ message: 'Internal server error' }); 
+    }
+});
+
 
 app.get('/api/authenticate', authenticateToken, (req, res) => {
     const token = getTokenFromCookie(req);
@@ -67,7 +85,6 @@ app.get('/api/authenticate', authenticateToken, (req, res) => {
 
 app.post('/api/logout', (req, res) => {
     res.setHeader('Set-cookie', `token=deleted; Max-Age=3600; HttpOnly`);
-
     res.json({ message: 'Logout successful' });
 });
 
