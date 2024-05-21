@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import io from 'socket.io-client';
 import axios from 'axios';
 import './MainPage.css';
-import GroupModal from './GroupModal';
-import UserStatus from './UserStatus';
+import GroupModal from '../components/GroupModal';
+import UserStatus from '../components/UserStatus';
+import Setting from '../components/Setting';
 
 const socket = io('http://localhost:3000');
 
@@ -16,12 +17,11 @@ function MainPage() {
     const [isCreate, setIsCreate] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
-    // const [notification, setNotification] = useState('');
+
 
     useEffect(() => {
         window.addEventListener('resize', handleResize);
-    
-        // Cleanup listener on component unmount
+        
         return () => {
           window.removeEventListener('resize', handleResize);
         };
@@ -77,9 +77,7 @@ function MainPage() {
 
             const handleMessage = (msg) => {
                 setMessages((prevMessages) => [...prevMessages, msg]);
-                // if (msg.chat_id !== selectedGroup) {
-                //     setNotification('New message received!');
-                // }
+                
             };
 
             socket.on('chat message', handleMessage);
@@ -95,7 +93,6 @@ function MainPage() {
         if (selectedGroup !== group.id) {
             setSelectedGroup(group.id);
             setMessages([]);
-            setNotification('');
         }
     };
 
@@ -120,6 +117,10 @@ function MainPage() {
         setSearchQuery(e.target.value);
     };
 
+    const closeModal = () => {
+        setIsCreate(false);
+    }
+
     const filteredGroups = groups.filter(group => 
         group.chatname.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -131,7 +132,7 @@ function MainPage() {
                     <div className="headbar">
                         <h1>SKOUT</h1>
                         <button className="add" onClick={handleFind}> 
-                            <svg width="25px" height="25x" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M8 10.5H16" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
                             <path d="M8 14H13.5" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
                             <path d="M17 3.33782C15.5291 2.48697 13.8214 2 12 2C6.47715 2 2 6.47715 2 12C2 13.5997 2.37562 15.1116 3.04346 16.4525C3.22094 16.8088 3.28001 17.2161 3.17712 17.6006L2.58151 19.8267C2.32295 20.793 3.20701 21.677 4.17335 21.4185L6.39939 20.8229C6.78393 20.72 7.19121 20.7791 7.54753 20.9565C8.88837 21.6244 10.4003 22 12 22C17.5228 22 22 17.5228 22 12C22 10.1786 21.513 8.47087 20.6622 7" stroke="#1C274C" stroke-width="1.5" stroke-linecap="round"/>
@@ -152,15 +153,10 @@ function MainPage() {
                                 <div key={index} className="item" onClick={() => handleGroupSelect(group)}>
                                     <UserStatus username={group.chatname} chatname={group.chatname}></UserStatus>
                                     <span  className = 'chatname'>{group.chatname}</span>
-                                    {/* {notification && <div className="notification">{notification}</div>} */}
                                 </div>
                         ))}
                     </div>
-                    <div className="setting">
-                        {!isSmallScreen && <UserStatus username={username} className="use" />}
-                        <div className="name">{username}</div>
-                        <div className="setButton">Setting</div>
-                    </div>
+                    <Setting isSmallScreen={isSmallScreen} username={username}></Setting>
                 </div>
                 {selectedGroup && (                   
                     <div className="chatarea">
@@ -185,7 +181,7 @@ function MainPage() {
                 )}
                 
             </div>
-            {isCreate && <GroupModal username={username} chatname={username}/>}
+            {isCreate && <GroupModal username={username} closeModal={closeModal}/>}
         </>
     );
 }

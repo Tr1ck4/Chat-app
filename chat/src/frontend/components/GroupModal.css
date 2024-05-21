@@ -2,10 +2,11 @@
     position : absolute;
     width: 20%;
     height: 30%;
-    transform : translateX(15vw);
+    transform : translateX(16vw);
     background-color: rgb(110, 110, 110);
     padding: 20px;
     border-radius: 10px;
+    margin-top: 2vh;
 }
 
 .findRes{
@@ -30,6 +31,25 @@
 
 .userbt:hover{
     background-color:rgb(200, 200, 200)
+}
+
+@media (max-width: 1200px){
+    .findBox{
+        transform: translateX(28vw);
+        width:30vw;
+    }
+    .findArea{
+        width:23vw;
+    }
+}
+@media (max-width: 600px){
+    .findBox{
+        transform: translateX(17vw);
+        width:35vw;
+    }
+    .findArea{
+        width:25vw;
+    }
 }
 
 

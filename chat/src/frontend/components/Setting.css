@@ -1,0 +1,57 @@
+.setting{
+    display: flex;
+    flex-direction: row;
+    width: 12vw;
+    height: 5vh;
+    align-items:center;
+    border-top: 1px solid rgba(255, 255, 255, 1);
+    padding-left:1vw;
+    align-content:center;
+    justify-content: space-between;
+}
+
+.setButton{
+    margin-right:1vw;
+}
+
+.setting .user-status{
+    scale: 0.8;
+}
+
+.name{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 5vw;
+}
+
+@keyframes rotate{
+    from {
+        transform: rotate(0deg);
+    }
+    to{
+        transform: rotate(360deg);
+    }
+}
+
+.rotate-animation{
+    animation: rotate 0.5s cubic-bezier(0.5, 1, 0.3, 1);
+}
+
+.setButton{
+    margin-right:1vw;
+}
+@media (max-width: 1200px) {
+    .setting{
+        width: 24vw;
+    }
+}
+
+@media (max-width: 600px) {
+    .setting {
+        width: 13vw;
+    }
+    .setting .name {
+        display: none;
+    }
+}

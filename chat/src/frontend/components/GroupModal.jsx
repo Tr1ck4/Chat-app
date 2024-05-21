@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import io from 'socket.io-client';
-import './Modal.css';
-import './MainPage.css';
+import './GroupModal.css';
+import '../pages/MainPage.css';
 
 const socket = io('http://localhost:3000');
 
-export default function GroupModal({ username }) {
+export default function GroupModal({ username, closeModal }) {
   const [input, setInput] = useState("");
   const [users, setUsers] = useState([]);
   const [isFinding, setIsFinding] = useState(false);
+
+  const modalRef = useRef(null);
+
+  useEffect(() => {
+      function handleClickOutside(event) {
+          if (modalRef.current && !modalRef.current.contains(event.target)) {
+              closeModal();
+          }
+      }
+
+      document.addEventListener('mousedown', handleClickOutside);
+
+      return () => {
+          document.removeEventListener('mousedown', handleClickOutside);
+      };
+  }, [closeModal]);
 
   const findUser = async (value) => {
     if (value) {
@@ -38,7 +54,7 @@ export default function GroupModal({ username }) {
   }
 
   return (
-    <div className='findBox'>
+    <div className='findBox' ref={modalRef}>
       To :
       <input
         className='findArea'

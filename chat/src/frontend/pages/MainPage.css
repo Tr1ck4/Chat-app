@@ -57,8 +57,9 @@ button.add{
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 100px;
+    max-width: 5vw;
 }
+
 .panel{
     position: fixed;
     background: rgba(255, 255, 255, 0.4);
@@ -73,15 +74,7 @@ button.add{
     margin-top: 2vh;
     margin-left: 1vw;
 }
-.setting{
-    display: flex;
-    flex-direction: row;
-    width: 12vw;
-    height: 5vh;
-    align-items:center;
-    border-top: 1px solid rgba(255, 255, 255, 1);
-    padding-left:1vw;
-}
+
 .groups{
     position:flex;
     width: 15vw;
@@ -101,6 +94,7 @@ button.add{
     padding-left: 1vw;
     
 }
+
 
 .item:hover{
     background-color: #aed2ff;
@@ -206,7 +200,11 @@ span {
     border: none;
 }
 
-@media (max-width: 768px) {
+.chat-input:focus, .search:focus{
+    outline: none;
+}
+
+@media (max-width: 1200px) {
     .panel{
         width: 25vw;
     }
@@ -223,9 +221,6 @@ span {
     .item{
         width: 24vw;
     }
-    .setting{
-        width: 24vw;
-    }
     .chatarea{
         width: 70vw;
         margin-left:12vw;
@@ -238,7 +233,7 @@ span {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
     .headbar h1 {
         display: none;
         width: 14vw;
@@ -250,15 +245,6 @@ span {
         width: 14vw;
     }
     span.chatname {
-        display: none;
-    }
-    .setting {
-        width: 13vw;
-    }
-    .setting .name {
-        display: none;
-    }
-    .setting .use {
         display: none;
     }
     .groups{
@@ -275,6 +261,16 @@ span {
     }
     .user-status{
         display: none;
+    }
+    .chatarea{
+        margin-left:1vw;
+        width:80vw;
+    }
+    .chat-input{
+        width: 74vw;
+    }
+    .inputbox{
+        width: 77vw;
     }
 }
 

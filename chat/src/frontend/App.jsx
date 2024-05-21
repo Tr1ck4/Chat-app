@@ -1,9 +1,9 @@
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import React from 'react';
-import LoginPage from './Login';
-import MainPage from './MainPage';
-import RegisterPage from './Register';
+import LoginPage from './pages/Login';
+import MainPage from './pages/MainPage';
+import RegisterPage from './pages/Register';
 
 export default function App() {
     return (
