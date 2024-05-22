@@ -42,7 +42,7 @@ const RegisterPage = () => {
                         <input className='formInput' type="password" spellCheck='false' value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
 
-                    <button className='login' type="submit" onClick={handleSubmit}>Register</button>
+                    <button className='loginButton' type="submit" onClick={handleSubmit}>Register</button>
 
                 </form>
                 <img src= {icon} className = 'icon'></img>
