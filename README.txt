@@ -1,6 +1,8 @@
-Guide for set up project 
+This is a simple Chat web-application with Websocket.
 
-1. Install the project
+Guide for set up project :
+
+1. Install the project.
 2. Run commands:
     cd chat
     npm run build #build frontend components
