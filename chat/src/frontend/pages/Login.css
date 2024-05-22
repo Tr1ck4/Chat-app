@@ -4,6 +4,7 @@
     height: 100%;
     background-image: url('./assets/background.jpg');
     background-size: fill;
+    font-family: sans-serif;
 }
 
 .loginBox {
