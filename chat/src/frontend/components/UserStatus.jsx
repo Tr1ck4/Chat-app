@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './UserStatus.css';
 
-function UserStatus({ username, chatname }) {
+function UserStatus({ username }) {
     const [status, setStatus] = useState(0);
 
     useEffect(() => {
         const fetchStatus = async () => {
             try {
-                const res = await axios.get(`/api/status/${username}`);
+                const res = await axios.get(`/api/status/${username}`);//find the status of user for each converstation
                 setStatus(res.data.status);
             } catch (error) {
                 console.error('Error fetching user status:', error);
@@ -17,7 +17,7 @@ function UserStatus({ username, chatname }) {
 
         fetchStatus();
 
-        const interval = setInterval(fetchStatus, 5000);
+        const interval = setInterval(fetchStatus, 5000);//redo after 5s
 
         return () => clearInterval(interval);
     }, [username]);

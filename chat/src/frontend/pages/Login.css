@@ -1,18 +1,16 @@
-
-  
-.bg{
+.bg {
     position: fixed;
     width: 100%;
     height: 100%;
     background-image: url('./assets/background.jpg');
-    background-size : fill;
-  }
-  
+    background-size: fill;
+}
+
 .loginBox {
     position: fixed;
     width: 40%;
     height: 50%;
-    background-color: #313338;
+    background-color: #3b3b3b;
     box-shadow: 0px 0px 10px 3px whitesmoke;
     transform: translate(75%, 50%);
     border-radius: 10px;
@@ -46,13 +44,32 @@
     padding-bottom: 5%;
 }
 
-.loginBox .form .input .formInput {
+.input input {
+    outline: none;
+    background-color: #0d0d0d;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    border: none;
+    width: 19vw;
+}
+
+.formInput {
     width: 20vw;
     height: 4vh;
+    color: white;
+}
+
+.loginButton {
+    width: 21vw;
+    height: 4vh;
+    color: white;
+    border-radius: 40px;
+    background-color: #5865F2;
+    border: none;
 }
 
 .loginBox .form .input .part {
-    color: #B5BAC1;
+    color: #b5bac1;
     font-size: small;
     font-weight: bold;
     padding-bottom: 1vh;
@@ -63,79 +80,100 @@
     margin-top: 1vh;
 }
 
-.loginBox .avatar{
-    position : fixed;
-    width: 23%;
-    height: 30%;
-    transform: translate(270%,-180%);
-    background-image: url('./assets/icon.png');
-    background-size: contain;
+.icon {
+    width: 10vw;
+    height:auto;
+    transform: translate(26vw, -30vh);
 }
 
-.icon{
-    scale: 0.5;
-    transform: translate(150%,-180%);
+.bottomline {
+    display: flex;
+    align-items: center;
+    color: white;
 }
-  
+
+a {
+    color: blue;
+}
+
+.loginButton:hover {
+    box-shadow: 0 5px 10px rgba(0, 0, 0);
+    transform: translateY(-3px);
+}
+
 @media (max-width: 768px) {
     .loginBox {
         width: 70%;
-        transform: translate(20%,70%);
-        height : 40%;
-    }
-    .loginBox .welcome .hello {
-        font-size: 1.25rem; /* Adjust font size for tablets */
-    }
-    .loginBox .welcome .greet {
-        font-size: 0.875rem; /* Adjust font size for tablets */
+        transform: translate(20%, 70%);
+        height: 40%;
     }
 
-    .loginBox .form .input .formInput{
+    .loginBox .welcome .hello {
+        font-size: 1.25rem;
+    }
+
+    .loginBox .welcome .greet {
+        font-size: 0.875rem;
+    }
+
+    .loginBox .form .input .formInput {
         width: 35vw;
         height: 4vh;
     }
-    .icon{
-        scale:0.3;
-        transform: translate(130%,-260%);
+
+    .loginButton {
+        width: 40vw;
     }
 
+    .icon {
+        width: 20vw;
+        transform: translate(45vw, -30vh);
+    }
 }
 
 @media (max-width: 480px) {
     .loginBox {
         min-width: 70%;
-        padding: 1rem; /* Adjust padding */
+        padding: 1rem;
     }
 
-    .loginBox .welcome{
+    .loginBox .welcome {
         min-width: 70vw;
     }
+
     .loginBox .welcome .hello {
-        font-size: 1rem; /* Adjust font size for mobile devices */
+        font-size: 1rem;
     }
+
     .loginBox .welcome .greet {
-        font-size: 0.75rem; /* Adjust font size for mobile devices */
+        font-size: 0.75rem;
     }
 
-    .loginBox .form{
+    .loginBox .form {
         min-width: 50vw;
-        margin-right : 2vw;
+        margin-right: 2vw;
     }
 
-    .loginBox .form .login{
+    .loginBox .form .login {
         min-width: 65vw;
-
+        height: 3vh;
     }
 
-    .bottomline{
-        margin-top:2vh
+    .loginButton {
+        width: 57vw;
     }
 
-    .loginBox .form .input .formInput{
-        min-width: 64vw;
-        min-height: 3vh;
+    .bottomline {
+        padding-top: 1vh;
+        color: #B5BAC1;
     }
-    .loginBox .icon{
+
+    .loginBox .form .input .formInput {
+        width: 50vw;
+        height: 3vh;
+    }
+
+    .loginBox .icon {
         visibility: hidden;
     }
 }

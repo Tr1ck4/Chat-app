@@ -9,13 +9,13 @@ const LoginPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();      
         try {
-            const res = await axios.post('/api/login', {
-                username: username,
+            const res = await axios.post('/api/login', {//call api for login
+                username: username,//username and password for parsing
                 password: password
             });
             
             if (res.status >= 200 && res.status < 300) {
-                window.location.replace('/'); 
+                window.location.replace('/'); //if success then process to homepage
             } else {
                 throw new Error('Login failed: Invalid credentials');
             }
@@ -42,10 +42,11 @@ const LoginPage = () => {
                         <input className='formInput' type="password" spellCheck='false' value={password} onChange={(e) => setPassword(e.target.value)} />
                     </div>
 
-                    <button className='login' type="submit" onClick={handleSubmit}>Login</button>
+                    <button className='loginButton' type="submit" onClick={handleSubmit}>Login</button>
 
                     <div className='input'>
-                        <div className = 'bottomline'style={ {color: '#B5BAC1', fontSize:'small', paddingTop: '5px'}}>Need an account? 
+                        <div className = 'bottomline'>
+                            <p>Need an account?</p> 
                             <a href='/register' style={{paddingLeft:'10px'}}>Register</a>
                         </div>
                     </div>

@@ -12,6 +12,8 @@
 
 .setButton{
     margin-right:1vw;
+    align-self: center;
+    justify-self: center;
 }
 
 .setting .user-status{
@@ -23,6 +25,37 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     max-width: 5vw;
+}
+
+.popup {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(0vw,85vh);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+    position: absolute;
+    top: 50px; 
+    right: 10px; 
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.8px);
+    -webkit-backdrop-filter: blur(7.8px);
+    border: 1px solid rgba(255, 255, 255, 1);
+    padding: 10px;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(0vw,80vh);
+    z-index: 1000;
+}
+
+.popup.show:hover{
+    background-color:rgb(153, 190, 255);
+    color:white;
 }
 
 @keyframes rotate{
@@ -45,13 +78,30 @@
     .setting{
         width: 24vw;
     }
+
+    .popup.show{
+        transform: translate(0vw,79vh);
+    }
 }
 
 @media (max-width: 600px) {
     .setting {
         width: 13vw;
+        justify-content: center;
     }
     .setting .name {
         display: none;
     }
+    .setting .user-status{
+        display: none;
+    }
+
+    .popup{
+        width: 10vw;
+    }
+
+    .popup.show{
+        transform: translate(2vw,79vh);
+    }
+    
 }

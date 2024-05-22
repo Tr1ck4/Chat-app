@@ -4,6 +4,7 @@
     width:100vw;
     height: 100vh;
     overflow : hidden;
+    font-family: sans-serif;
 }
 
 html, body {
@@ -95,6 +96,19 @@ button.add{
     
 }
 
+.modalbox{
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-5vw);
+    transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+}
+
+.modalbox.show{
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(0vw);
+}
+
 
 .item:hover{
     background-color: #aed2ff;
@@ -105,25 +119,25 @@ button.add{
     width: 5px;
   }
   
-  ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     box-shadow: inset 0 0 5px transparent;
     border-radius: 10px;
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
     background: gray;
     border-radius: 10px;
-  }
+}
 
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #555;
-  }
+}
 
 .inputbox{
     position:absolute;
-    width: 81vw;
-    margin-left: 1vw;
+    width: 79vw;
+    margin-left: 2vw;
     height:4vh;
     background-color: #555;
     align-content: center;
@@ -134,11 +148,12 @@ button.add{
     position: relative;
     height: 88vh;
     margin-left: 2vw;
-    margin-right: 2vw;
+    margin-right: 1vw;
     margin-top: 3vh;
     overflow-y: auto; 
     display: flex;
     flex-direction: column;
+    padding-right:1vw;
 }
 .chatname {
     width: 50px;
@@ -185,7 +200,7 @@ span {
     border: 1px solid rgba(255, 255, 255, 1);
     width: 83vw;
     height : 96vh;
-    z-index: 9999;
+    z-index: 9;
     transform: translate(16vw,-2vh);
     margin-top:4vh;
 }

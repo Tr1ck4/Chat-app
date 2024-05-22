@@ -16,9 +16,9 @@ function MainPage() {
     const [selectedGroup, setSelectedGroup] = useState(null);
     const [isCreate, setIsCreate] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);
+    const [isSmallScreen, setIsSmallScreen] = useState(window.innerWidth <= 480);//for resizing purpose
 
-
+    //for resizing purpose
     useEffect(() => {
         window.addEventListener('resize', handleResize);
         
@@ -30,44 +30,45 @@ function MainPage() {
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const res = await axios.get('/api/authenticate');
+                const res = await axios.get('/api/authenticate');//check if user is logged in
                 if (res.status !== 200) {
                     console.warn('Authentication failed, redirecting to login');
-                    window.location.replace('/login');
+                    window.location.replace('/login');//if not, relocate user to login page
                 } else {
-                    const Username = res.data.username;
+                    const Username = res.data.username;//else, set data
                     setUsername(Username);
 
-                    const groupsRes = await axios.get(`/api/groups/${Username}`);
+                    const groupsRes = await axios.get(`/api/groups/${Username}`);//load group chats for the username
                     setGroups(groupsRes.data);
 
-                    socket.emit('connected', Username);
+                    socket.emit('connected', Username);//announce to socket that user is ready, update status
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
-                window.location.replace('/login');
+                window.location.replace('/login');//if any other error, move to login page
             }
         };
 
-        fetchUserData();
+        fetchUserData();//for each time user access page, initialize the data
 
         return () => {
-            socket.off('disconnect');
+            socket.off('disconnect');//if client turn off, announce to socket that user disconnected
             socket.disconnect();
         };
     }, []);
 
+    //for resizing purpose
     const handleResize = () => {
         setIsSmallScreen(window.innerWidth <= 480);
     };
     useEffect(() => {
         if (selectedGroup) {
-            socket.emit('join', selectedGroup);
+            socket.emit('join', selectedGroup);//if user choose a group chat, let user in the socket room with chat_id
 
             const fetchMessages = async () => {
                 try {
-                    const response = await axios.get(`/api/groups/${selectedGroup}/0`);
-                    setMessages(response.data.reverse());
+                    const response = await axios.get(`/api/groups/${selectedGroup}/0`);//load the messages of that group
+                    setMessages(response.data.reverse());//reverse it to display top to bottom
                 } catch (error) {
                     console.error('Error loading messages:', error);
                 }
@@ -76,7 +77,7 @@ function MainPage() {
             fetchMessages();
 
             const handleMessage = (msg) => {
-                setMessages((prevMessages) => [...prevMessages, msg]);
+                setMessages((prevMessages) => [...prevMessages, msg]);//handle input message
                 
             };
 
@@ -89,38 +90,39 @@ function MainPage() {
         }
     }, [selectedGroup]);
 
-    const handleGroupSelect = (group) => {
+    const handleGroupSelect = (group) => {//update group id for click
         if (selectedGroup !== group.id) {
             setSelectedGroup(group.id);
             setMessages([]);
         }
     };
 
-    const handleMessageSubmit = () => {
+    const handleMessageSubmit = () => {//handle message sending
         if (inputValue.trim() !== '') {
             socket.emit('chat message', { content: inputValue, chat_id: selectedGroup, username: username });
             setInputValue('');
         }
     };
 
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e) => {//key down for sending message
         if (e.key === 'Enter') {
             handleMessageSubmit();
         }
     };
 
-    const handleFind = () => {
+    const handleFind = () => {//open the Group Modal
         setIsCreate(true);
     };
 
-    const handleSearchChange = (e) => {
+    const handleSearchChange = (e) => {//handle search bar for group's name
         setSearchQuery(e.target.value);
     };
 
-    const closeModal = () => {
+    const closeModal = () => {//close Group Modal
         setIsCreate(false);
     }
 
+    //filter group panel to search bar
     const filteredGroups = groups.filter(group => 
         group.chatname.toLowerCase().includes(searchQuery.toLowerCase())
     );
@@ -181,7 +183,9 @@ function MainPage() {
                 )}
                 
             </div>
-            {isCreate && <GroupModal username={username} closeModal={closeModal}/>}
+            <div className = {`modalbox ${isCreate ? 'show' : ''}`}>
+                <GroupModal username={username} closeModal={closeModal}/>
+            </div>
         </>
     );
 }

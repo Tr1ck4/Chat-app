@@ -1,10 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Setting.css';
 import UserStatus from './UserStatus';
+import axios from 'axios';
 
-export default function Setting ({ isSmallScreen, username }) {
+const Setting = ({ isSmallScreen, username }) => {
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
+
     useEffect(() => {
-        const handleRotateAnimation = () => {
+        const handleRotateAnimation = () => {//handle animation
             const svgElement = document.getElementById('settings-icon');
             svgElement.classList.add('rotate-animation');
 
@@ -13,14 +16,29 @@ export default function Setting ({ isSmallScreen, username }) {
             }, { once: true });
         };
 
-        const setButton = document.querySelector('.setButton');
-        setButton.addEventListener('click', handleRotateAnimation);
+        const setButton = document.querySelector('.setButton');//handle on click animation 
+        setButton.addEventListener('click', () => {
+            handleRotateAnimation();
+            setIsPopupVisible(!isPopupVisible);
+        });
 
         return () => {
-            setButton.removeEventListener('click', handleRotateAnimation);
+            setButton.removeEventListener('click', () => {
+                handleRotateAnimation();
+                setIsPopupVisible(!isPopupVisible);
+            });
         };
-    }, []);
+    }, [isPopupVisible]);
 
+    const handleLogout = async () => {//logout button
+        try {
+            await axios.post('/api/logout');
+            console.log('Logout successful');
+            window.location.replace('/login');
+        } catch (error) {
+            console.error('Logout failed', error);
+        }
+    };
     return (
         <div className="setting">
             {!isSmallScreen && <UserStatus username={username} className="use" />}
@@ -35,7 +53,12 @@ export default function Setting ({ isSmallScreen, username }) {
                     />
                 </svg>
             </div>
+            <div className={`popup ${isPopupVisible ? 'show' : ''}`}>
+                {/* Add content of the popup here */}
+                <div onClick={handleLogout}> Log out</div>
+            </div>
         </div>
     );
 };
 
+export default Setting;

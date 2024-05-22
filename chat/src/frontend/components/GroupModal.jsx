@@ -15,7 +15,7 @@ export default function GroupModal({ username, closeModal }) {
   const modalRef = useRef(null);
 
   useEffect(() => {
-      function handleClickOutside(event) {
+      function handleClickOutside(event) {//if user click outside modal then close modal
           if (modalRef.current && !modalRef.current.contains(event.target)) {
               closeModal();
           }
@@ -31,7 +31,7 @@ export default function GroupModal({ username, closeModal }) {
   const findUser = async (value) => {
     if (value) {
       try {
-        const response = await axios.get(`/api/users/${value}`);
+        const response = await axios.get(`/api/users/${value}`);//find all users to create a new conversation
         setUsers(response.data);
         setIsFinding(true);
       } catch (error) {
@@ -46,11 +46,11 @@ export default function GroupModal({ username, closeModal }) {
   };
 
   const handleUserClick = (value) => {
-    socket.emit('create', { id: uuidv4(), username: username, partner: value });
+    socket.emit('create', { id: uuidv4(), username: username, partner: value });//create a uuid and announce to socket to create a chat
     socket.on('group created', () => {
-      window.location.reload();
+      window.location.reload();//can change to insert into group set
     });
-    setIsFinding(false);
+    setIsFinding(false);//close modal after create
   }
 
   return (
@@ -65,8 +65,8 @@ export default function GroupModal({ username, closeModal }) {
           findUser(e.target.value);
         }}
       />
-      {isFinding && (
-        <div className='findRes'>
+      {(
+        <div className={`findRes ${isFinding ? 'show' : ''}`}>
           {users.length > 0 ? (
             users.map((user, index) => (
               <div className='item' key={index}>

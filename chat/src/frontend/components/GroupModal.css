@@ -1,17 +1,24 @@
 .findBox{
     position : absolute;
-    width: 20%;
-    height: 30%;
+    width: 15vw;
+    height : 28vh;
     transform : translateX(16vw);
-    background-color: rgb(110, 110, 110);
     padding: 20px;
-    border-radius: 10px;
     margin-top: 2vh;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(7.8px);
+    -webkit-backdrop-filter: blur(7.8px);
+    border: 1px solid rgba(255, 255, 255, 1);
+    
 }
 
 .findRes{
     overflow-y: scroll;
     height: 25vh;
+    width: 100%;
+    
 }
 
 .findArea{
@@ -19,8 +26,8 @@
     padding: 8px;
     border: none;
     outline: none;
-    background-color: rgb(110, 110, 110);
-    color:white
+    color:black;
+    background-color:transparent;
 }
 
 .userbt{
@@ -51,5 +58,4 @@
         width:25vw;
     }
 }
-
 

@@ -9,13 +9,13 @@ const RegisterPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();      
         try {
-            const res = await axios.post('/api/register', {
-                username: username,
+            const res = await axios.post('/api/register', {//call api for register a new account
+                username: username,//parse username and password for data
                 password: password
             });
             console.log(res);
             if (res.status >= 200 && res.status < 300) {
-                window.location.replace('/login'); 
+                window.location.replace('/login'); //if succeed creating a new account, user needs to login
             } else {
                 throw new Error('Register failed: Invalid username or password');
             }
